@@ -18,12 +18,19 @@ jobs:
           java-version: 1.8
 
       - name: Step3 - Have GitHub actions build Maven project
-        run: mvn -B package --file pom.xml
-
-      - name: Step4 - List the current directory
-        run: ls -a
-
-      - name: Step5 - What is in te current directory
         run: |
-          cd target
-          ls -a
+          mvn -B package --file pom.xml
+          mkdir staging && cp target/*.jar staging
+
+      - name: Step4 - Set up cache for Maven
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-$${{ hashfiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
+      - name: Step5 - Persist workflow data as artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: github-actions-artifact
+          path: staging
