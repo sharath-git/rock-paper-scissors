@@ -29,7 +29,7 @@ jobs:
           key: ${{ runner.os }}-m2-$${{ hashfiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      - name: Step5 - Persist workflow data as artifacts
+      - name: Step5 - Persist/Upload workflow data as artifacts
         uses: actions/upload-artifact@v2
         with:
           name: github-actions-artifact
