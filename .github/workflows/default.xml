@@ -1,0 +1,25 @@
+name: Deploy Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        default: 'development'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set Hostname
+        run: |
+          if [ "${{ github.event.inputs.environment }}" = "production" ]; then
+            export HOSTNAME=production.example.com
+          elif [ "${{ github.event.inputs.environment }}" = "staging" ]; then
+            export HOSTNAME=staging.example.com
+          else
+            export HOSTNAME=development.example.com
+          fi
+          echo "Hostname: $HOSTNAME"
